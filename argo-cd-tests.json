@@ -1,0 +1,38 @@
+{
+  "variables": {
+    "app":             "{{env `GITHUB_WORKFLOW`}}",
+    "from_image":      "gcr.io/kuar-demo/kuard-amd64:{{env `KUARD_VERSION`}}",
+    "project_name":    "{{env `PROJECT_NAME`}}",
+    "docker_username": "{{env `DOCKER_USERNAME`}}",
+    "docker_password": "{{env `DOCKER_PASSWORD`}}",
+    "tag":             "{{env `KUARD_VERSION`}}"
+  },
+  "builders":[
+    {
+      "type": "docker",
+      "commit": true,
+      "image": "{{user `from_image`}}",
+      "run_command": ["-dit", "--net=host", "{{.Image}}", "/bin/bash"],
+      "changes": [
+          "ENV LANG en_US.utf8",
+          "ENV LC_ALL en_US.UTF-8",
+          "ENV LANGUAGE en_US.UTF-8"
+      ]
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "docker.io/{{user `project_name`}}/{{user `app`}}",
+        "tag": "{{user `tag`}}"
+      },
+      {
+        "type": "docker-push",
+        "login": true,
+        "login_username": "{{user `docker_username`}}",
+        "login_password": "{{user `docker_password`}}"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,30 @@
+name: container
+on:
+  push:
+  schedule:
+  - cron:  '35 19 * * *'
+env:
+  PACKER_VERSION: 1.6.0
+  KUARD_VERSION: blue
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        debian_version: [buster, bullseye]
+    steps:
+    - name: checkout the code
+      uses: actions/checkout@v1
+    - name: the-more-you-know
+      run: env | sort
+    - name: get packer
+      run: |
+        wget -q https://releases.hashicorp.com/packer/${{env.PACKER_VERSION}}/packer_${{env.PACKER_VERSION}}_linux_amd64.zip
+        unzip -q packer_${{env.PACKER_VERSION}}_linux_amd64.zip
+        rm packer_${{env.PACKER_VERSION}}_linux_amd64.zip
+    - name: build
+      run: $GITHUB_WORKSPACE/packer build argo-cd-tests.json
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        PROJECT_NAME: yellowmegaman
