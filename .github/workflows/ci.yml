@@ -1,4 +1,4 @@
-name: container
+name: argo-cd-tests
 on:
   push:
   schedule:
