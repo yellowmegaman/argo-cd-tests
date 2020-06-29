@@ -9,9 +9,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        debian_version: [buster, bullseye]
     steps:
     - name: checkout the code
       uses: actions/checkout@v1

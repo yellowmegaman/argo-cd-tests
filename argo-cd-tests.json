@@ -12,7 +12,7 @@
       "type": "docker",
       "commit": true,
       "image": "{{user `from_image`}}",
-      "run_command": ["-dit", "--net=host", "{{.Image}}", "/bin/bash"],
+      "run_command": ["-dit", "--net=host", "{{.Image}}", "/bin/ash"],
       "changes": [
           "ENV LANG en_US.utf8",
           "ENV LC_ALL en_US.UTF-8",
